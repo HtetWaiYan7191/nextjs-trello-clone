@@ -1,11 +1,12 @@
 import React from 'react'
+import { SideBar } from '../_components/sidebar'
 
 const OrganizationLayout = ({children} : {children : React.ReactNode}) => {
   return (
-    <main className='pt-20 md:pt-24 px-4 max-w-6xl 2xl:max-w-screen-xl mx-auto bg-red-500'>
+    <main className='pt-20 md:pt-24 px-4 max-w-6xl 2xl:max-w-screen-xl mx-auto'>
         <div className='flex gap-x-7'>
-            <div className='w-64 shrink-0 hidden md:block bg-sky-200'>
-                {/* sidebar */}
+            <div className='w-64 shrink-0 hidden md:block '>
+                <SideBar/>
             </div>
             {children}
         </div>
