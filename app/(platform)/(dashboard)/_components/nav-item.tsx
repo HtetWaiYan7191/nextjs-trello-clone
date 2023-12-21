@@ -4,6 +4,15 @@ import { AccordionTrigger } from '@/components/ui/accordion';
 import Image from 'next/image';
 import React from 'react'
 import { cn } from '@/lib/utils';
+import {
+    Activity,
+    CreditCard,
+    Layout,
+    Settings,
+} from "lucide-react"
+import { useRouter, usePathname } from 'next/navigation';
+import { AccordionContent } from '@radix-ui/react-accordion';
+import { Button } from '@/components/ui/button';
 export type Organization = {
     id: string;
     slug: string;
@@ -18,6 +27,35 @@ interface NavItemProps {
     onExpand: (id: string) => void;
 }
 const NavItem = ({isActive, isExpanded, organization, onExpand} : NavItemProps) => {
+    const router = useRouter();
+    const pathName = usePathname();
+    const routes = [
+        {
+            label: 'Boards',
+            icon: <Layout className='h-4 w-4 mr-2'/>,
+            href: `/organization/${organization.id}`,
+        },
+
+        {
+            label: 'Activity',
+            icon: <Activity className='h-4 w-4 mr-2'/>,
+            href: `/organization/${organization.id}/activity`,
+        },
+        {
+            label: 'Settings',
+            icon: <Settings className='h-4 w-4 mr-2'/>,
+            href: `/organization/${organization.id}/settings`,
+        },
+        {
+            label: 'Billing',
+            icon: <CreditCard className='h-4 w-4 mr-2'/>,
+            href: `/organization/${organization.id}/billing`,
+        },
+    ];
+    const onClick = (href: string) => {
+        router.push(href);
+    }
+
   return (
     <AccordionItem value={organization.id} 
     className='border-none'>
@@ -28,12 +66,24 @@ const NavItem = ({isActive, isExpanded, organization, onExpand} : NavItemProps) 
                 <div className="w-7 h-7 relative">
                     <Image fill src={organization.imageUrl}
                     alt='organization' 
-                    className='rounded-sm object-cover'>
-
-                    </Image>
+                    className='rounded-sm object-cover' />
                 </div>
+                <span className='font-medium text-sm'>
+                    {organization.name}
+                </span>
             </div>
         </AccordionTrigger>
+        <AccordionContent className='pt-1 text-neutral-700'>
+            {
+                routes.map((route) => (
+                    <Button key={route.href} size="sm" onClick={() => onClick(route.href)} 
+                    className={cn('w-full font-normal justify-start pl-10 mb-1', pathName === route.href && "bg-sky-500/10 text-sky-700")} variant="ghost"  >
+                        {route.icon}
+                        {route.label}
+                    </Button>
+                ))
+            }
+        </AccordionContent>
     </AccordionItem>
   )
 }
